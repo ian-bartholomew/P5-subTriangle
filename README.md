@@ -1,4 +1,4 @@
 subTriangle
 ===========
 
-SubTriangle
+A music visualizer for Processing
