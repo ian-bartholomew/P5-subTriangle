@@ -26,7 +26,7 @@ public Minim minim;
 public AudioPlayer song;
 public FFT fftLin;
 
-int startCrack = 2;
+int startCrack = 3;
  
 public void setup() {
   size(1280, 1080);
