@@ -26,6 +26,9 @@ public Minim minim;
 public AudioPlayer song;
 public FFT fftLin;
 
+public BeatDetect beat;
+public BeatListener bl;
+
 int startCrack = 3;
  
 public void setup() {
@@ -51,6 +54,12 @@ public void setup() {
   // see the online tutorial for more info.
   fftLin = new FFT( song.bufferSize(), song.sampleRate() );
   fftLin.linAverages( 3 );
+  
+  beat = new BeatDetect(song.bufferSize(), song.sampleRate());
+  beat.setSensitivity(250);  
+  
+  bl = new BeatListener(beat, song); 
+  
   noStroke();
 }
  
@@ -59,13 +68,14 @@ public void draw() {
    
   fftLin.forward( song.mix );
  
-  int r = (int) random(0,f.size());  
-  Poly p = f.get(r);
-  
-  p.setBrightness( fftLin.getAvg(0) * 100 );
-  p.setHue( fftLin.getAvg(1) * 100 );
-  p.setSaturation( fftLin.getAvg(2) * 100);
-  
+  if ( beat.isKick() ) {
+    int r = (int) random(0,f.size());  
+    Poly p = f.get(r);
+    
+    p.setBrightness( fftLin.getAvg(0) * 100 );
+    p.setHue( fftLin.getAvg(1) * 100 );
+    p.setSaturation( fftLin.getAvg(2) * 100);
+  }
   for (Poly pp:f) pp.draw();
  
   if (doCrack) crack();
