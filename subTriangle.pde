@@ -26,7 +26,7 @@ public Minim minim;
 public AudioPlayer song;
 public FFT fftLin;
 
-int startCrack = 3;
+int startCrack = 2;
  
 public void setup() {
   size(1280, 1080);
@@ -50,26 +50,21 @@ public void setup() {
   // and that it means the size of the spectrum will be 1024. 
   // see the online tutorial for more info.
   fftLin = new FFT( song.bufferSize(), song.sampleRate() );
-  fftLin.linAverages( 1 );
-  
+  fftLin.linAverages( 3 );
+  noStroke();
 }
  
 public void draw() {
-  background(0);
-  stroke(0,128);
+  background(0);  
    
   fftLin.forward( song.mix );
  
+  int r = (int) random(0,f.size());  
+  Poly p = f.get(r);
   
-  for (int i=0; i<fftLin.avgSize(); i++){
-    float avg = fftLin.getAvg(i);
-    int r = (int) random(0,f.size());  
-    Poly p = f.get(r);
-    println( avg );
-    // get a random triangle and set the brightness
-    float b = avg * 100;          
-    p.setBrightness( b );
-  }
+  p.setBrightness( fftLin.getAvg(0) * 100 );
+  p.setHue( fftLin.getAvg(1) * 100 );
+  p.setSaturation( fftLin.getAvg(2) * 100);
   
   for (Poly pp:f) pp.draw();
  
